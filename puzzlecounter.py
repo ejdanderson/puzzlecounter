@@ -37,11 +37,7 @@ for index, contourArea in enumerate(contourAreaList, start=0):
         numLess += 1
     else :
         numSweet += 1
-        print contourArea
         cv2.drawContours(img2, contours, index, (0, 255, 0), -1)
-
-    if contourArea == 2768.0:
-        cv2.drawContours(img2, contours, index, (255, 255, 255), -1)
 
 
 # Plop out results, because plopping out is the best
