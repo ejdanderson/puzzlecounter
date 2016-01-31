@@ -26,7 +26,7 @@ for contour in contours:
 
 aMedian = np.median(contourAreaList);
 
-# Color the pieces. Green = Good,  Red = Bigger then 1 std dev. Blue = Smaller than 1 Std Dev
+# Color the pieces. Green = Good, Red = Bigger, Blue = Smaller
 for index, contourArea in enumerate(contourAreaList, start=0):
     if contourArea > aMedian * 1.5 :
         # OpenCV using BGR hence this is Red, not Blue in RGB
@@ -41,8 +41,8 @@ for index, contourArea in enumerate(contourAreaList, start=0):
 
 
 # Plop out results, because plopping out is the best
-print 'Number of objects within 2 * Median:', numSweet
-print 'Number of objects > 2 * Median:', numGreater
+print 'Number of objects within acceptable range:', numSweet
+print 'Number of objects > 1.5 * Median:', numGreater
 print 'Number of objects < 2 * Median:', numLess
 print 'Number of objects total:', numSweet + numGreater + numLess
 print 'Median:', aMedian
