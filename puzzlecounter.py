@@ -6,12 +6,13 @@ import sys
 img = cv2.imread(sys.argv[1], 0); # Finding contours requires grayscale
 img2 = cv2.imread(sys.argv[1]);  # Draw colors on this one
 
+# TODO threshold should be a flag
 ret,thresh = cv2.threshold(img, 150, 255, 0);
-contours,hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE);
+contours,hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
 
-contourAreaList = []
+
 # declare vars
-
+contourAreaList = []
 numSweet = 0
 numLess = 0
 numGreater = 0
