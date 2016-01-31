@@ -1,51 +1,55 @@
 import cv2
+import copy
+import numpy as np
+import sys
 
 # Setup the image(s)
-img = cv2.imread('dots4.jpg', 0); # Finding contours requires grayscale
-img2 = cv2.imread('dots4.jpg'); # Draw colors on this one
-ret,thresh = cv2.threshold(img, 127, 255, 0);
+img = cv2.imread(sys.argv[1], 0); # Finding contours requires grayscale
+img2 = cv2.imread(sys.argv[1]);  # Draw colors on this one
+img3 = copy.copy(img2);
+
+ret,thresh = cv2.threshold(img, 150, 255, 0);
 contours,hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE);
 
+contourAreaList = []
 # declare vars
-aTot = 0
-lTot = 0
-numObj = 0
-aAvg = 0
-lAvg = 0
-aSumDeviation = 0
-lSumDeviation = 0
 
-# Math
+numSweet = 0
+numLess = 0
+numGreater = 0
+area = 0
+
+# Extract the area
 for contour in contours:
-    aTot += cv2.contourArea(contour)
-    lTot += cv2.arcLength(contour, True)
-    numObj += 1
+    area = cv2.contourArea(contour)
+    contourAreaList.append(area);
 
-aAvg = aTot / numObj
-lAvg = lTot / numObj
-
-# Calc Std Deviation
-for contour in contours:
-    aSumDeviation += (cv2.contourArea(contour) - aAvg) ** 2
-    lSumDeviation += (cv2.arcLength(contour, True) - lAvg ) ** 2
-
-aStdDev = ( aSumDeviation / numObj ) ** 0.5
-lStdDev = ( lSumDeviation / numObj ) ** 0.5
+aMedian = np.median(contourAreaList);
 
 # Color the pieces. Green = Good,  Red = Bigger then 1 std dev. Blue = Smaller than 1 Std Dev
-for index, contour in enumerate(contours, start=0):
-    if cv2.contourArea(contour) > aAvg + aStdDev :
+for index, contourArea in enumerate(contourAreaList, start=0):
+    if contourArea > aMedian * 1.5 :
         # OpenCV using BGR hence this is Red, not Blue in RGB
-        cv2.drawContours(img2, contours, index, (0, 0, 255), -1);
-    elif cv2.contourArea(contour) < aAvg - aStdDev :
-        cv2.drawContours(img2, contours, index, (255, 0, 0), -1);
+        cv2.drawContours(img2, contours, index, (0, 0, 255), -1)
+        numGreater += 1
+    elif contourArea < aMedian / 2 :
+        cv2.drawContours(img2, contours, index, (255, 0, 0), -1)
+        numLess += 1
     else :
-        cv2.drawContours(img2, contours, index, (0, 255, 0), -1);
+        numSweet += 1
+        print contourArea
+        cv2.drawContours(img2, contours, index, (0, 255, 0), -1)
+
+    if contourArea == 2768.0:
+        cv2.drawContours(img2, contours, index, (255, 255, 255), -1)
+
 
 # Plop out results, because plopping out is the best
-# print aTot,aAvg
-# print lTot, lAvg
-# print aStdDev,lStdDev
-print 'Number of objects:', numObj
+print 'Number of objects within 2 * Median:', numSweet
+print 'Number of objects > 2 * Median:', numGreater
+print 'Number of objects < 2 * Median:', numLess
+print 'Number of objects total:', numSweet + numGreater + numLess
+print 'Median:', aMedian
+print 'Mean:', np.mean(contourAreaList)
 
-cv2.imwrite('dotsp.jpg', img2);
+cv2.imwrite('piuz-2.jpg', img2);
