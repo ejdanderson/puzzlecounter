@@ -1,12 +1,10 @@
 import cv2
-import copy
 import numpy as np
 import sys
 
 # Setup the image(s)
 img = cv2.imread(sys.argv[1], 0); # Finding contours requires grayscale
 img2 = cv2.imread(sys.argv[1]);  # Draw colors on this one
-img3 = copy.copy(img2);
 
 ret,thresh = cv2.threshold(img, 150, 255, 0);
 contours,hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE);
