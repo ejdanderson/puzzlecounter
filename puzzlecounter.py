@@ -46,4 +46,4 @@ print 'Number of objects total:', numSweet + numGreater + numLess
 print 'Median:', aMedian
 print 'Mean:', np.mean(contourAreaList)
 
-cv2.imwrite('piuz-2.jpg', img2);
+cv2.imwrite('colored-' + sys.argv[1], img2);
