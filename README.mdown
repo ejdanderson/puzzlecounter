@@ -1,0 +1,23 @@
+# Puzzle Counter
+
+## What does this do?
+
+Puzzle Counter takes an image of a puzzle with the pieces spread out and counts them and outputs a new image. The new image will have the pieces that were counted in varying colors. Green pieces will be "acceptable" for counting, red will be pieces which are deemed too large, possibly two pieces which are touching and double counted. Pieces which are deemed too small will be colored dark blue, this will hopefully only denote dust or other particles on the background. 
+
+
+## Usage
+
+`python puzzlecounter.py image.jpg`
+
+
+## Todo 
+
+### Easy
+- Specify threshold range as a flag
+- Create flag to specify median multiplier for less than and larger than
+
+### Medium
+- Autodetect background color
+
+### Advanced
+- Remove artifacts such as dust from the image
